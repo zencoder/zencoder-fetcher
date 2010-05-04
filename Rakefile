@@ -5,12 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "zencoder-notifier"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "christopher.warren@gmail.com"
-    gem.homepage = "http://github.com/chriswarren/zencoder-notifier"
+    gem.summary = %Q{Grabs notifications from Zencoder for local development.}
+    gem.description = %Q{Grabs notifications from Zencoder for local development where Zencoder is unable to communicate to the server, usually because it's local.}
+    gem.email = "chris@zencoder.com"
+    gem.homepage = "http://github.com/zencoder/zencoder-notifier"
     gem.authors = ["chriswarren"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_dependency 'HTTParty'
+    gem.add_dependency 'JSON'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

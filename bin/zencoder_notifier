@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder_notifier')
+require 'trollop'
+
+#
+# Configure options
+#
+
+opts = Trollop::options do
+  version "Zencoder Notifier #{ZencoderNotifier.version} (c) Zencoder Inc. All rights reserved, etc."
+  banner <<-EOS
+Zencoder Notifier helps developers create applications using Zencoder.
+
+Usage:
+        bin/zencoder_notifier -key [options]
+
+where [options] are:
+EOS
+  opt :url, "URL to post the Zencoder notification", :short => 'u', :type => String, :default => "http://localhost:3000"
+  opt :loop, "Run the notifier in a loop.", :short => 'l', :default => false
+  opt :seconds, "Check every x seconds.", :short => 's', :type => Integer, :default => 60
+  opt :count, "Number of notifications to retrieve per page.", :short => 'c', :type => Integer, :default => 50
+  opt :page, "The page to load.", :short => 'p', :type => Integer, :default => 1
+end
+
+#
+# Validate input
+#
+
+if ARGV[0].nil?
+  puts <<-EOS
+Error: no API Key specified
+
+Usage:
+
+      bin/zencoder_notifier [options] <api_key>
+
+EOS
+  exit -1
+end
+
+#
+# Run Zencoder Notifier
+#
+
+options = {}
+options[:api_key] = ARGV[0]
+options[:url] = opts[:url]
+options[:count] = opts[:count]
+options[:page] = opts[:page]
+
+if opts[:loop]
+  begin
+    loop do
+      puts "Checking Zencoder for Notifications at #{Time.now}"
+      ZencoderNotifier.request(options)
+      sleep opts[:seconds]
+    end
+  rescue SystemExit, Interrupt
+    raise "Quitting..."
+  rescue Exception => e
+    puts e.class
+    puts e.message
+    puts e.backtrace
+    raise
+  end
+else
+  ZencoderNotifier.request(options)
+end
