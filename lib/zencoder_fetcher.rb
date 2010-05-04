@@ -23,8 +23,10 @@ module ZencoderFetcher
           HTTParty.post(post_uri, job)
         end
         puts "#{response.size} notifications retrieved and posted to #{post_uri}"
-      else
+      elsif response.body =~ /errors/
         puts JSON.parse(response.body)["errors"]
+      else
+        puts "No notifications found."
       end
     rescue Exception => e
       raise e
