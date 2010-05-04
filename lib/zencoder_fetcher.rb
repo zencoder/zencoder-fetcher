@@ -16,7 +16,7 @@ module ZencoderFetchet
     page = options[:page] ? options[:page] : 1
     
     begin
-      response = HTTParty.get("http://localhost:3000/api/notifications.json?api_key=#{api_key}&per_page=#{per_page}&page=#{page}")
+      response = HTTParty.get("http://app.zencoder.com/api/notifications.json?api_key=#{api_key}&per_page=#{per_page}&page=#{page}")
       if response.is_a?(Array)
         response.each do |job|
           job = JSON.parse(job)
