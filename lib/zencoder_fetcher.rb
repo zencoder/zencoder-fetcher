@@ -2,7 +2,7 @@ require 'rubygems'
 require 'httparty'
 require 'json'
 
-module ZencoderFetchet
+module ZencoderFetcher
   FETCHER_VERSION = [0,1] unless defined?(FETCHER_VERSION)
   
   def self.version

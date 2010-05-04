@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder_notifier')
+require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder_fetcher.rb')
 require 'trollop'
 
 #
@@ -53,11 +53,11 @@ begin
   if opts[:loop]
     loop do
       puts "Checking Zencoder for Notifications at #{Time.now}"
-      ZencoderNotifier.request(options)
+      ZencoderFetcher.request(options)
       sleep opts[:seconds]
     end
   else
-    ZencoderNotifier.request(options)
+    ZencoderFetcher.request(options)
   end
 rescue SystemExit, Interrupt
   raise "Quitting..."
