@@ -4,7 +4,16 @@ Fetcher is for developers working with Zencoder. If Zencoder can't notify your s
 
 == Commands
 
+Run with the
 
+  zencoder_fetcher [options] API_KEY
+
+Options:
+* --url, -u:           URL to post the Zencoder notification (default: http://localhost:3000)
+* --loop, -l:          Run the notifier in a loop.
+* --seconds, -s <i>:   Check every x seconds. (Default: 60)
+* --count, -c <i>:     Number of notifications to retrieve per page. (Default: 50)
+* --page, -p <i>:      The page to load. (Default: 1)
 
 == Note on Patches/Pull Requests
  

@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{zencoder-fetcher}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["chriswarren"]
@@ -28,7 +28,8 @@ Gem::Specification.new do |s|
      "bin/zencoder_fetcher",
      "lib/zencoder_fetcher.rb",
      "test/helper.rb",
-     "test/test_zencoder-fetcher.rb"
+     "test/test_zencoder-fetcher.rb",
+     "zencoder-fetcher.gemspec"
   ]
   s.homepage = %q{http://github.com/zencoder/zencoder-fetcher}
   s.rdoc_options = ["--charset=UTF-8"]
