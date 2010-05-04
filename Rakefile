@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "zencoder-notifier"
+    gem.name = "zencoder-fetcher"
     gem.summary = %Q{Grabs notifications from Zencoder for local development.}
     gem.description = %Q{Grabs notifications from Zencoder for local development where Zencoder is unable to communicate to the server, usually because it's local.}
     gem.email = "chris@zencoder.com"
-    gem.homepage = "http://github.com/zencoder/zencoder-notifier"
+    gem.homepage = "http://github.com/zencoder/zencoder-fetcher"
     gem.authors = ["chriswarren"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     gem.add_dependency 'HTTParty'

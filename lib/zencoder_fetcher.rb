@@ -2,11 +2,11 @@ require 'rubygems'
 require 'httparty'
 require 'json'
 
-module ZencoderNotifier
-  NOTIFIER_VERSION = [0,1] unless defined?(NOTIFIER_VERSION)
+module ZencoderFetchet
+  FETCHER_VERSION = [0,1] unless defined?(FETCHER_VERSION)
   
   def self.version
-    NOTIFIER_VERSION.join(".")
+    FETCHER_VERSION.join(".")
   end
   
   def self.request(options={})

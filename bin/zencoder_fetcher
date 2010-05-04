@@ -7,12 +7,12 @@ require 'trollop'
 #
 
 opts = Trollop::options do
-  version "Zencoder Notifier #{ZencoderNotifier.version} (c) Zencoder Inc. All rights reserved, etc."
+  version "Zencoder Fetcher #{ZencoderFetcher.version} (c) Zencoder Inc. All rights reserved, etc."
   banner <<-EOS
-Zencoder Notifier helps developers create applications using Zencoder.
+Zencoder Fetcher helps developers create applications using Zencoder.
 
 Usage:
-        bin/zencoder_notifier -key [options]
+        bin/zencoder_fetcher [options] <api_key>
 
 where [options] are:
 EOS
@@ -49,21 +49,21 @@ options[:url] = opts[:url]
 options[:count] = opts[:count]
 options[:page] = opts[:page]
 
-if opts[:loop]
-  begin
+begin
+  if opts[:loop]
     loop do
       puts "Checking Zencoder for Notifications at #{Time.now}"
       ZencoderNotifier.request(options)
       sleep opts[:seconds]
     end
-  rescue SystemExit, Interrupt
-    raise "Quitting..."
-  rescue Exception => e
-    puts e.class
-    puts e.message
-    puts e.backtrace
-    raise
+  else
+    ZencoderNotifier.request(options)
   end
-else
-  ZencoderNotifier.request(options)
+rescue SystemExit, Interrupt
+  raise "Quitting..."
+rescue Exception => e
+  puts e.class
+  puts e.message
+  puts e.backtrace
+  raise
 end

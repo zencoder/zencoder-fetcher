@@ -1,6 +1,6 @@
-= zencoder-notifier
+= zencoder-fetcher
 
-Description goes here.
+Fetcher is for developers working with Zencoder. If Zencoder can't notify your server when a job has completed, Fetcher can get the responses and push them to the server for you.
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +14,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 chriswarren. See LICENSE for details.
+Copyright (c) 2010 Phronos. See LICENSE for details.
