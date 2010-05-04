@@ -14,4 +14,4 @@ Fetcher is for developers working with Zencoder. If Zencoder can't notify your s
 
 == Copyright
 
-Copyright (c) 2010 Phronos. See LICENSE for details.
+Copyright (c) 2010 Zencoder. See LICENSE for details.
