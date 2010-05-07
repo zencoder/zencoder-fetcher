@@ -21,6 +21,7 @@ EOS
   opt :seconds, "Check every x seconds.", :short => 's', :type => Integer, :default => 60
   opt :count, "Number of notifications to retrieve per page.", :short => 'c', :type => Integer, :default => 50
   opt :page, "The page to load.", :short => 'p', :type => Integer, :default => 1
+  opt :all, "Get all records on each request, rather than only new ones.", :short => 'a', :default => false
 end
 
 #
@@ -48,13 +49,21 @@ options[:api_key] = ARGV[0]
 options[:url] = opts[:url]
 options[:count] = opts[:count]
 options[:page] = opts[:page]
+options[:all] = opts[:all]
 
 begin
   if opts[:loop]
+    @since_job_id = 0
     loop do
-      puts "Checking Zencoder for Notifications at #{Time.now}"
-      ZencoderFetcher.request(options)
-      sleep opts[:seconds]
+      begin
+        puts "Checking Zencoder for Notifications at #{Time.now}"
+        options.merge!({:since_job_id => @since_job_id})
+        last_job = ZencoderFetcher.request(options)
+        @since_job_id = last_job if last_job > @since_job_id
+        sleep [10,opts[:seconds]].max
+      rescue Exception => e
+        raise e
+      end
     end
   else
     ZencoderFetcher.request(options)
