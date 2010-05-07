@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["chriswarren"]
-  s.date = %q{2010-05-06}
+  s.date = %q{2010-05-07}
   s.default_executable = %q{zencoder_fetcher}
   s.description = %q{Fetches notifications from Zencoder for local development where Zencoder is unable to communicate to the server, usually because it's localhost.}
   s.email = %q{chris@zencoder.com}
