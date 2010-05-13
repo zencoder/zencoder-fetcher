@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{zencoder-fetcher}
-  s.version = "0.1.3"
+  s.version = "0.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["chriswarren"]
-  s.date = %q{2010-05-07}
+  s.date = %q{2010-05-13}
   s.default_executable = %q{zencoder_fetcher}
   s.description = %q{Fetches notifications from Zencoder for local development where Zencoder is unable to communicate to the server, usually because it's localhost.}
   s.email = %q{chris@zencoder.com}
@@ -49,15 +49,18 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
       s.add_runtime_dependency(%q<httparty>, [">= 0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
+      s.add_runtime_dependency(%q<trollop>, [">= 0"])
     else
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
       s.add_dependency(%q<httparty>, [">= 0"])
       s.add_dependency(%q<json>, [">= 0"])
+      s.add_dependency(%q<trollop>, [">= 0"])
     end
   else
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
     s.add_dependency(%q<httparty>, [">= 0"])
     s.add_dependency(%q<json>, [">= 0"])
+    s.add_dependency(%q<trollop>, [">= 0"])
   end
 end
 
