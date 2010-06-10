@@ -12,7 +12,7 @@ opts = Trollop::options do
 Zencoder Fetcher helps developers create applications using Zencoder.
 
 Usage:
-        bin/zencoder_fetcher [options] <api_key>
+        zencoder_fetcher [options] <api_key>
 
 where [options] are:
 EOS
@@ -21,6 +21,7 @@ EOS
   opt :seconds, "Check every x seconds.", :short => 's', :type => Integer, :default => 60
   opt :count, "Number of notifications to retrieve per page.", :short => 'c', :type => Integer, :default => 50
   opt :page, "The page to load.", :short => 'p', :type => Integer, :default => 1
+  opt :since_job_id, "Load notifications since the given job_id.", :short => 'j', :type => Integer, :default => nil
   opt :all, "Get all records on each request, rather than only new ones.", :short => 'a', :default => false
 end
 
@@ -34,7 +35,7 @@ Error: no API Key specified
 
 Usage:
 
-      bin/zencoder_notifier [options] <api_key>
+      zencoder_fetcher [options] <api_key>
 
 EOS
   exit -1
@@ -50,6 +51,7 @@ options[:url] = opts[:url]
 options[:count] = opts[:count]
 options[:page] = opts[:page]
 options[:all] = opts[:all]
+options[:since_job_id] = opts[:since_job_id]
 
 begin
   if opts[:loop]

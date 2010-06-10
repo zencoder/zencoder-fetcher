@@ -9,11 +9,12 @@ Run with the
   zencoder_fetcher [options] API_KEY
 
 Options:
-* --url, -u:           URL to post the Zencoder notification (default: http://localhost:3000)
-* --loop, -l:          Run the notifier in a loop.
-* --seconds, -s <i>:   Check every x seconds. (Default: 60)
-* --count, -c <i>:     Number of notifications to retrieve per page. (Default: 50)
-* --page, -p <i>:      The page to load. (Default: 1)
+* --url, -u:                  URL to post the Zencoder notification (default: http://localhost:3000)
+* --loop, -l:                 Run the notifier in a loop, as a daemon.
+* --seconds, -s <i>:          Check every x seconds. (Default: 60)
+* --count, -c <i>:            Number of notifications to retrieve per page. (Default: 50)
+* --page, -p <i>:             The page to load. (Default: 1)
+* --since_job_id, -p <i>:     Load notifications since the given job_id. (Default gets all jobs)
 
 == Note on Patches/Pull Requests
  
