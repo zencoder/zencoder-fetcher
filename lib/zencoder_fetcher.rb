@@ -26,7 +26,7 @@ module ZencoderFetcher
           i = 0
           latest_job_id = 0
           JSON.parse(response.body).each do |job|
-            options = {:headers => {"Content-type" => "application/json"}, :body => job}
+            options = {:headers => {"Content-type" => "application/json"}, :body => job.to_json}
             HTTParty.post(post_uri, options)
             latest_job_id = JSON.parse(job)["job"]["id"].to_i if JSON.parse(job)["job"]["id"].to_i > latest_job_id
             i += 1
