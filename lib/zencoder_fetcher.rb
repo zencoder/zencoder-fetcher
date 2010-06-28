@@ -27,9 +27,13 @@ module ZencoderFetcher
           latest_job_id = 0
           JSON.parse(response.body).each do |job|
             options = {:headers => {"Content-type" => "application/json"}, :body => job.to_json}
-            HTTParty.post(post_uri, options)
-            latest_job_id = JSON.parse(job)["job"]["id"].to_i if JSON.parse(job)["job"]["id"].to_i > latest_job_id
-            i += 1
+            begin
+              HTTParty.post(post_uri, options)
+              latest_job_id = job["job"]["id"].to_i if job["job"]["id"].to_i > latest_job_id
+              i += 1
+            rescue Errno::ECONNREFUSED => e
+              raise Exception, "Unable to connect to your local server at #{post_uri}. Is it running?"
+            end
           end
           puts "#{i} notifications retrieved and posted to #{post_uri}"
           return latest_job_id
