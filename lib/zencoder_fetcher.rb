@@ -12,6 +12,8 @@ module ZencoderFetcher
   def self.request(options={})
     api_key = options[:api_key]
     post_uri = options[:url] ? options[:url] : "http://localhost:3000/"
+
+    auth = post_uri.match(/^https?:\/\/([^\/]+):([^\/]+)@/) ? {:username=>$1, :password=>$2} : {}
     per_page = options[:count] ? options[:count] : 50
     page = options[:page] ? options[:page] : 1
     since_job_id = (options[:all] || options[:since_job_id].to_s == "") ? 0 : options[:since_job_id]
@@ -27,6 +29,7 @@ module ZencoderFetcher
           latest_job_id = 0
           JSON.parse(response.body).each do |job|
             options = {:headers => {"Content-type" => "application/json"}, :body => job.to_json}
+	    options = options.merge({:basic_auth => auth}) if !auth.empty?
             begin
               HTTParty.post(post_uri, options)
               latest_job_id = job["job"]["id"].to_i if job["job"]["id"].to_i > latest_job_id
