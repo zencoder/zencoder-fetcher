@@ -22,7 +22,7 @@ EOS
   opt :count, "Number of notifications to retrieve per page.", :short => 'c', :type => Integer, :default => 50
   opt :page, "The page to load.", :short => 'p', :type => Integer, :default => 1
   opt :since, "Load notifications starting since _n_ minutes ago.", :short => 'm', :type => Integer, :default => nil
-  opt :endpoint, "Zencoder endpoint to use. Defaults to https://app.zencoder.com/.", :short => 'e'
+  opt :endpoint, "Zencoder endpoint to use. Defaults to https://app.zencoder.com/.", :short => 'e', :type => String
 end
 
 
