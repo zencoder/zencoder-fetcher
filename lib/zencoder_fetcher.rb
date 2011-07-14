@@ -1,48 +1,53 @@
 require 'rubygems'
 require 'httparty'
 require 'json'
+require 'time'
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,1] unless defined?(FETCHER_VERSION)
-  
+  FETCHER_VERSION = [0,2] unless defined?(FETCHER_VERSION)
+
   def self.version
     FETCHER_VERSION.join(".")
   end
-  
+
   def self.request(options={})
-    api_key = options[:api_key]
-    post_uri = options[:url] ? options[:url] : "http://localhost:3000/"
-    per_page = options[:count] ? options[:count] : 50
-    page = options[:page] ? options[:page] : 1
-    since_job_id = (options[:all] || options[:since_job_id].to_s == "") ? 0 : options[:since_job_id]
-    
-    begin
-      response = HTTParty.get("http://app.zencoder.com/api/notifications.json?api_key=#{api_key}&per_page=#{per_page}&page=#{page}&since_id=#{since_job_id}")
-      
-      if response.body.is_a?(String)
-        if response.body =~ /\{"errors"/
-          puts JSON.parse(response.body)["errors"]
-        else
-          i = 0
-          latest_job_id = 0
-          JSON.parse(response.body).each do |job|
-            options = {:headers => {"Content-type" => "application/json"}, :body => job.to_json}
-            begin
-              HTTParty.post(post_uri, options)
-              latest_job_id = job["job"]["id"].to_i if job["job"]["id"].to_i > latest_job_id
-              i += 1
-            rescue Errno::ECONNREFUSED => e
-              raise Exception, "Unable to connect to your local server at #{post_uri}. Is it running?"
-            end
-          end
-          puts "#{i} notifications retrieved and posted to #{post_uri}"
-          return latest_job_id
+    query = {
+      "api_key"  => options[:api_key],
+      "per_page" => options[:count] || 50,
+      "page"     => options[:page] || 1
+    }
+    query["since"] = options[:since].iso8601 if options[:since]
+    query = query.map{|k,v| "#{k}=#{v}" }.join("&")
+
+    local_url = options[:url] || "http://localhost:3000/"
+
+    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/notifications.json?#{query}",
+                            :headers => { "HTTP_X_FETCHER_VERSION" => version })
+
+    if response["errors"]
+      puts "There was an error fetching notifications:"
+      puts response.body.to_s
+      raise
+    else
+      response["notifications"].each do |notification|
+        begin
+          HTTParty.post(local_url,
+                        :body => notification.to_json,
+                        :headers => { "Content-type" => "application/json" })
+        rescue Errno::ECONNREFUSED => e
+          puts "Unable to connect to your local server at #{local_url}. Is it running?"
+          raise FetcherLocalConnectionError
         end
-      else
-        puts "No notifications found."
       end
-    rescue Exception => e
-      raise e
+      puts "Notifications retrieved: #{response["notifications"].size}"
+      puts "Posted to: #{local_url}" if response["notifications"].size > 0
+      puts
+
+      Time.parse(response["sent_at"])
     end
   end
 end
+
+
+class FetcherError < StandardError; end
+class FetcherLocalConnectionError < FetcherError; end

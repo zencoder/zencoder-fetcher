@@ -18,12 +18,13 @@ where [options] are:
 EOS
   opt :url, "URL to post the Zencoder notification", :short => 'u', :type => String, :default => "http://localhost:3000"
   opt :loop, "Run the notifier in a loop.", :short => 'l', :default => false
-  opt :seconds, "Check every x seconds.", :short => 's', :type => Integer, :default => 60
+  opt :interval, "Check every x seconds.", :short => 'n', :type => Integer, :default => 60
   opt :count, "Number of notifications to retrieve per page.", :short => 'c', :type => Integer, :default => 50
   opt :page, "The page to load.", :short => 'p', :type => Integer, :default => 1
-  opt :since_job_id, "Load notifications since the given job_id.", :short => 'j', :type => Integer, :default => nil
-  opt :all, "Get all records on each request, rather than only new ones.", :short => 'a', :default => false
+  opt :since, "Load notifications starting since _n_ minutes ago.", :short => 'm', :type => Integer, :default => nil
+  opt :endpoint, "Zencoder endpoint to use. Defaults to https://app.zencoder.com/.", :short => 'e'
 end
+
 
 #
 # Validate input
@@ -38,43 +39,42 @@ Usage:
       zencoder_fetcher [options] <api_key>
 
 EOS
-  exit -1
+  exit 1
 end
+
 
 #
 # Run Zencoder Notifier
 #
 
-options = {}
-options[:api_key] = ARGV[0]
-options[:url] = opts[:url]
-options[:count] = opts[:count]
-options[:page] = opts[:page]
-options[:all] = opts[:all]
-options[:since_job_id] = opts[:since_job_id]
+options            = {}
+options[:api_key]  = ARGV[0]
+options[:url]      = opts[:url]
+options[:count]    = opts[:count]
+options[:page]     = opts[:page]
+options[:since]    = (opts[:since] && (Time.now.utc - (opts[:since].to_i * 60))) || nil
+options[:endpoint] = opts[:endpoint]
 
 begin
   if opts[:loop]
-    @since_job_id = 0
+    @since = options[:since]
     loop do
-      begin
-        puts "Checking Zencoder for Notifications at #{Time.now}"
-        options.merge!({:since_job_id => @since_job_id})
-        last_job = ZencoderFetcher.request(options)
-        @since_job_id = last_job if last_job > @since_job_id
-        sleep [10,opts[:seconds]].max
-      rescue Exception => e
-        raise e
-      end
+      puts "Checking Zencoder for Notifications" << (@since ? " since #{@since.utc.strftime('%b %e, %Y @ %H:%M:%S %Z')}" : "")
+      options.merge!(:since => @since)
+      @since = ZencoderFetcher.request(options)
+      sleep [10, opts[:interval]].max
     end
   else
     ZencoderFetcher.request(options)
   end
 rescue SystemExit, Interrupt
-  raise "Quitting..."
+  puts "Quitting..."
+  exit 0
+rescue FetcherError
+  exit 1
 rescue Exception => e
   puts e.class
   puts e.message
   puts e.backtrace
-  raise
+  exit 1
 end
