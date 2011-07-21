@@ -4,7 +4,7 @@ require 'json'
 require 'time'
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,1] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,2] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
@@ -20,6 +20,7 @@ module ZencoderFetcher
     query = query.map{|k,v| "#{k}=#{v}" }.join("&")
 
     local_url = options[:url] || "http://localhost:3000/"
+    auth = local_url.match(/^https?:\/\/([^\/]+):([^\/]+)@/) ? {:username=>$1, :password=>$2} : {}
 
     response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/notifications.json?#{query}",
                             :headers => { "HTTP_X_FETCHER_VERSION" => version })
@@ -31,9 +32,10 @@ module ZencoderFetcher
     else
       response["notifications"].each do |notification|
         begin
-          HTTParty.post(local_url,
-                        :body => notification.to_json,
-                        :headers => { "Content-type" => "application/json" })
+          options = {:body => notification.to_json,
+                     :headers => { "Content-type" => "application/json"}}
+          options = options.merge({:basic_auth => auth}) if !auth.empty?
+          HTTParty.post(local_url, options)
         rescue Errno::ECONNREFUSED => e
           puts "Unable to connect to your local server at #{local_url}. Is it running?"
           raise FetcherLocalConnectionError
