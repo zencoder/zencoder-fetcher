@@ -4,7 +4,7 @@ require 'json'
 require 'time'
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,1] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
@@ -43,7 +43,7 @@ module ZencoderFetcher
       puts "Posted to: #{local_url}" if response["notifications"].size > 0
       puts
 
-      Time.parse(response["sent_at"])
+      Time.parse(response["sent_at"].to_s)
     end
   end
 end
