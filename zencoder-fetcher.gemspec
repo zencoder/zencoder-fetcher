@@ -5,18 +5,20 @@ $:.unshift lib unless $:.include?(lib)
 require 'zencoder_fetcher'
 
 Gem::Specification.new do |s|
-  s.name        = "zencoder-fetcher"
-  s.version     = ZencoderFetcher.version
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Chris Warren", "Brandon Arbini"]
-  s.email       = ["chris@zencoder.com", "b@zencoder.com"]
-  s.homepage    = "http://github.com/zencoder/zencoder-fetcher"
-  s.summary     = "Fetches notifications from Zencoder for local development."
-  s.description = "Fetches notifications from Zencoder for local development where Zencoder is unable to communicate to the server, usually because it's localhost."
-  s.executables << "zencoder_fetcher"
+  s.name          = "zencoder-fetcher"
+  s.version       = ZencoderFetcher.version
+  s.platform      = Gem::Platform::RUBY
+  s.authors       = ["Chris Warren", "Brandon Arbini"]
+  s.email         = ["chris@zencoder.com", "b@zencoder.com"]
+  s.homepage      = "http://github.com/zencoder/zencoder-fetcher"
+  s.summary       = "Fetches notifications from Zencoder for local development."
+  s.description   = "Fetches notifications from Zencoder for local development where Zencoder is unable to communicate to the server, usually because it's localhost."
+  s.requirements  = "A Zencoder Account - http://zencoder.com"
+  s.executables   << "zencoder_fetcher"
   s.add_dependency "trollop"
   s.add_dependency "httparty"
   s.add_dependency "json"
-  s.files        = Dir.glob("bin/**/*") + Dir.glob("lib/**/*") + %w(LICENSE README.rdoc)
-  s.require_path = 'lib'
+  s.add_dependency "activesupport", "~> 2.3.8"
+  s.files         = Dir.glob("bin/**/*") + Dir.glob("lib/**/*") + %w(LICENSE README.rdoc)
+  s.require_path  = 'lib'
 end

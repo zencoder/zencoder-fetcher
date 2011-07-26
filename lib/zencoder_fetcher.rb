@@ -2,9 +2,10 @@ require 'rubygems'
 require 'httparty'
 require 'json'
 require 'time'
+require 'active_support'
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,2] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,3] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
@@ -32,8 +33,15 @@ module ZencoderFetcher
     else
       response["notifications"].each do |notification|
         begin
-          options = {:body => notification.to_json,
-                     :headers => { "Content-type" => "application/json"}}
+          format = notification.delete("format")
+          if format == "xml"
+            options = {:body => notification.to_xml}
+          else
+            options = {:body => notification.to_json}
+          end
+          options = options.merge({:headers => {"Content-Type" => "application/#{format}"}}) if format
+          puts format
+          puts options
           options = options.merge({:basic_auth => auth}) if !auth.empty?
           HTTParty.post(local_url, options)
         rescue Errno::ECONNREFUSED => e
