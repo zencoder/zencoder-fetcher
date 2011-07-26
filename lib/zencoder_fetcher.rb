@@ -31,6 +31,8 @@ module ZencoderFetcher
       puts response.body.to_s
       raise
     else
+      puts "Notifications retrieved: #{response["notifications"].size}"
+      puts "Posting to #{local_url}" if response["notifications"].size > 0
       response["notifications"].each do |notification|
         begin
           format = notification.delete("format")
@@ -40,8 +42,6 @@ module ZencoderFetcher
             options = {:body => notification.to_json}
           end
           options = options.merge({:headers => {"Content-Type" => "application/#{format}"}}) if format
-          puts format
-          puts options
           options = options.merge({:basic_auth => auth}) if !auth.empty?
           HTTParty.post(local_url, options)
         rescue Errno::ECONNREFUSED => e
@@ -49,8 +49,7 @@ module ZencoderFetcher
           raise FetcherLocalConnectionError
         end
       end
-      puts "Notifications retrieved: #{response["notifications"].size}"
-      puts "Posted to: #{local_url}" if response["notifications"].size > 0
+      puts "Finished Posting" if response["notifications"].size > 0
       puts
 
       Time.parse(response["sent_at"].to_s)
