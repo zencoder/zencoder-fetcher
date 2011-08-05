@@ -2,7 +2,11 @@
 
 Fetcher is for developers working with Zencoder. If Zencoder can't notify your server when a job has completed, like if you're at localhost:3000, Fetcher can get the responses and push them to the server for you.
 
-If you are testing notifications you can use the URL `http://zencoderfetcher/` to create a successful notification.
+If you are testing notifications you can use the URL 
+
+  http://zencoderfetcher/
+
+to create a successful notification.
 
 == Commands
 
