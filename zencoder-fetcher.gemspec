@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "trollop"
   s.add_dependency "httparty"
   s.add_dependency "json"
-  s.add_dependency "activesupport", "~> 2.3.8"
+  s.add_dependency "activesupport", "~> 2.3.11"
   s.files         = Dir.glob("bin/**/*") + Dir.glob("lib/**/*") + %w(LICENSE README.rdoc)
   s.require_path  = 'lib'
 end
