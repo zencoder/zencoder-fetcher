@@ -3,6 +3,8 @@ require 'httparty'
 require 'json'
 require 'time'
 require 'active_support'
+require 'yaml'
+YAML::ENGINE.yamler = 'syck'
 
 module ZencoderFetcher
   FETCHER_VERSION = [0,2,3] unless defined?(FETCHER_VERSION)
