@@ -7,7 +7,7 @@ require 'trollop'
 #
 
 opts = Trollop::options do
-  version "Zencoder Fetcher #{ZencoderFetcher.version} (c) Zencoder Inc. All rights reserved, etc."
+  version "Zencoder Fetcher #{ZencoderFetcher::VERSION} (c) Zencoder Inc. All rights reserved, etc."
   banner <<-EOS
 Zencoder Fetcher helps developers create applications using Zencoder.
 

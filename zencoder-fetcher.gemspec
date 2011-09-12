@@ -2,11 +2,11 @@
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
-require 'zencoder-fetcher'
+require 'zencoder-fetcher/version'
 
 Gem::Specification.new do |s|
   s.name          = "zencoder-fetcher"
-  s.version       = ZencoderFetcher.version
+  s.version       = ZencoderFetcher::VERSION
   s.platform      = Gem::Platform::RUBY
   s.authors       = ["Chris Warren", "Brandon Arbini"]
   s.email         = ["chris@zencoder.com", "b@zencoder.com"]
