@@ -2,6 +2,8 @@
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
+require 'yaml'
+YAML::ENGINE.yamler = 'syck'
 require 'zencoder-fetcher/version'
 
 Gem::Specification.new do |s|
