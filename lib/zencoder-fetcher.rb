@@ -1,3 +1,4 @@
+require 'zencoder-fetcher/version'
 require 'rubygems'
 require 'httparty'
 require 'json'
@@ -7,12 +8,6 @@ require 'yaml'
 YAML::ENGINE.yamler = 'syck'
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,3] unless defined?(FETCHER_VERSION)
-
-  def self.version
-    FETCHER_VERSION.join(".")
-  end
-
   def self.request(options={})
     query = {
       "api_key"  => options[:api_key],
@@ -26,7 +21,7 @@ module ZencoderFetcher
     auth = local_url.match(/^https?:\/\/([^\/]+):([^\/]+)@/) ? {:username=>$1, :password=>$2} : {}
 
     response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/notifications.json?#{query}",
-                            :headers => { "HTTP_X_FETCHER_VERSION" => version })
+                            :headers => { "HTTP_X_FETCHER_VERSION" => VERSION })
 
     if response["errors"]
       puts "There was an error fetching notifications:"
