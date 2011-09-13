@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder_fetcher.rb')
+require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder-fetcher.rb')
 require 'trollop'
 
 #
@@ -7,12 +7,12 @@ require 'trollop'
 #
 
 opts = Trollop::options do
-  version "Zencoder Fetcher #{ZencoderFetcher.version} (c) Zencoder Inc. All rights reserved, etc."
+  version "Zencoder Fetcher #{ZencoderFetcher::VERSION} (c) Zencoder Inc. All rights reserved, etc."
   banner <<-EOS
 Zencoder Fetcher helps developers create applications using Zencoder.
 
 Usage:
-        zencoder_fetcher [options] <api_key>
+        zencoder-fetcher [options] <api_key>
 
 where [options] are:
 EOS
@@ -36,7 +36,7 @@ Error: no API Key specified
 
 Usage:
 
-      zencoder_fetcher [options] <api_key>
+      zencoder-fetcher [options] <api_key>
 
 EOS
   exit 1

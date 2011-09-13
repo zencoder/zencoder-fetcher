@@ -12,7 +12,7 @@ to create a successful notification.
 
 Run with the
 
-  zencoder_fetcher [options] API_KEY
+  zencoder-fetcher [options] API_KEY
 
 Options:
 * --url, -u:                  URL to post the Zencoder notification (default: http://localhost:3000)
