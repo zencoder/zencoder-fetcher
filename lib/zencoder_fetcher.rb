@@ -2,7 +2,11 @@ require 'rubygems'
 require 'httparty'
 require 'json'
 require 'time'
-require 'active_support'
+begin
+  require 'active_support/core_ext'
+rescue
+  require 'active_support'
+end
 
 module ZencoderFetcher
   FETCHER_VERSION = [0,2,3] unless defined?(FETCHER_VERSION)
