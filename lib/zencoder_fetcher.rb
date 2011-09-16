@@ -9,7 +9,7 @@ rescue
 end
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,3] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,4] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
