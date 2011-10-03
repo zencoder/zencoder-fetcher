@@ -9,7 +9,7 @@ rescue
 end
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,4] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,5] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
@@ -27,17 +27,17 @@ module ZencoderFetcher
     local_url = options[:url] || "http://localhost:3000/"
     auth = local_url.match(/^https?:\/\/([^\/]+):([^\/]+)@/) ? {:username=>$1, :password=>$2} : {}
 
-    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/notifications.json?#{query}",
+    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/v1/notifications.json?#{query}",
                             :headers => { "HTTP_X_FETCHER_VERSION" => version })
 
-    if response["errors"]
+    if !response[0]
       puts "There was an error fetching notifications:"
       puts response.body.to_s
-      raise
+      raise FetcherError
     else
-      puts "Notifications retrieved: #{response["notifications"].size}"
-      puts "Posting to #{local_url}" if response["notifications"].size > 0
-      response["notifications"].each do |notification|
+      puts "Notifications retrieved: #{response.size}"
+      puts "Posting to #{local_url}" if response.size > 0
+      response.each do |notification|
         begin
           format = notification.delete("format")
           if format == "xml"
@@ -53,7 +53,7 @@ module ZencoderFetcher
           raise FetcherLocalConnectionError
         end
       end
-      puts "Finished Posting" if response["notifications"].size > 0
+      puts "Finished Posting" if response.size > 0
       puts
 
       Time.parse(response["sent_at"].to_s)

@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "httparty"
   s.add_dependency "json"
   s.add_dependency "activesupport"
+  s.add_dependency "i18n"
   s.files         = Dir.glob("bin/**/*") + Dir.glob("lib/**/*") + %w(LICENSE README.rdoc)
   s.require_path  = 'lib'
 end
