@@ -9,7 +9,7 @@ rescue
 end
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,6] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,7] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
@@ -28,26 +28,34 @@ module ZencoderFetcher
     local_url = options[:url] || "http://localhost:3000/"
     auth = local_url.match(/^https?:\/\/([^\/]+):([^\/]+)@/) ? {:username=>$1, :password=>$2} : {}
 
-    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/v1/notifications.json?#{query}",
+    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/#{options[:api_version] || 'v1'}/notifications.json?#{query}",
                             :headers => { "HTTP_X_FETCHER_VERSION" => version })
 
     if response["errors"]
       puts "There was an error fetching notifications:"
       puts response.body.to_s
-      raise
+      raise FetcherError
     else
       puts "Notifications retrieved: #{response["notifications"].size}"
       puts "Posting to #{local_url}" if response["notifications"].size > 0
       response["notifications"].each do |notification|
-        begin
-          format = notification.delete("format")
-          if format == "xml"
+        format = notification.delete("format")
+        if format == "xml"
+          begin
             options = {:body => notification.to_xml}
-          else
-            options = {:body => notification.to_json}
+          rescue
+            puts "Unable to build notification."
           end
-          options = options.merge({:headers => {"Content-Type" => "application/#{format}"}}) if format
-          options = options.merge({:basic_auth => auth}) if !auth.empty?
+        else
+          begin
+            options = {:body => notification.to_json}
+          rescue
+            puts "Unable to build notification."
+          end
+        end
+        options = options.merge({:headers => {"Content-Type" => "application/#{format}"}}) if format
+        options = options.merge({:basic_auth => auth}) if !auth.empty?
+        begin
           HTTParty.post(local_url, options)
         rescue Errno::ECONNREFUSED => e
           puts "Unable to connect to your local server at #{local_url}. Is it running?"
