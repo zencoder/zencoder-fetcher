@@ -9,7 +9,7 @@ rescue
 end
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,7] unless defined?(FETCHER_VERSION)
+  FETCHER_VERSION = [0,2,8] unless defined?(FETCHER_VERSION)
 
   def self.version
     FETCHER_VERSION.join(".")
@@ -28,7 +28,7 @@ module ZencoderFetcher
     local_url = options[:url] || "http://localhost:3000/"
     auth = local_url.match(/^https?:\/\/([^\/]+):([^\/]+)@/) ? {:username=>$1, :password=>$2} : {}
 
-    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/#{options[:api_version] || 'v1'}/notifications.json?#{query}",
+    response = HTTParty.get("https://#{options[:endpoint] || 'app'}.zencoder.com/api/#{options[:api_version] || 'v2'}/notifications.json?#{query}",
                             :headers => { "HTTP_X_FETCHER_VERSION" => version })
 
     if response["errors"]
