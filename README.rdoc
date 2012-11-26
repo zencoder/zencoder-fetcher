@@ -21,7 +21,7 @@ Options:
 * --count, -c <i>:            Number of notifications to retrieve per page. (Default: 50)
 * --page, -p <i>:             The page to load. (Default: 1)
 * --since, -m <i>:            Load notifications starting since n minutes ago.
-* --api_version, -v:          The API version to use. (Default: v1)
+* --api_version, -v:          The API version to use. (Default: v2)
 
 == Copyright
 
