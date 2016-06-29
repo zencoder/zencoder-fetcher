@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder_fetcher.rb')
+require File.expand_path(File.dirname(__FILE__) + '/../lib/zencoder_fetcher_version.rb')
 require 'trollop'
 
 #
@@ -64,6 +65,7 @@ begin
       puts "Checking Zencoder for Notifications" << (@since ? " since #{@since.utc.strftime('%b %e, %Y @ %H:%M:%S %Z')}" : "")
       options.merge!(:since => @since)
       @since = ZencoderFetcher.request(options)
+      break if @since == true
       sleep [10, opts[:interval]].max
     end
   else

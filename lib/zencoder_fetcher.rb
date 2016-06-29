@@ -31,7 +31,10 @@ module ZencoderFetcher
       raise FetcherError
     else
       puts "Notifications retrieved: #{response["notifications"].size}"
-      puts "Posting to #{local_url}" if response["notifications"].size > 0
+      if response["notifications"].size > 0
+        puts "Posting to #{local_url}"
+        single_notification = true
+      end
       response["notifications"].each do |notification|
         format = notification.delete("format")
         if format == "xml"
@@ -51,6 +54,7 @@ module ZencoderFetcher
         options = options.merge({:basic_auth => auth}) if !auth.empty?
         begin
           HTTParty.post(local_url, options)
+          return true if single_notification
         rescue Errno::ECONNREFUSED
           puts "Unable to connect to your local server at #{local_url}. Is it running?"
           raise FetcherLocalConnectionError
