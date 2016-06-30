@@ -25,6 +25,7 @@ EOS
   opt :since, "Load notifications starting since _n_ minutes ago.", :short => 'm', :type => Integer, :default => nil
   opt :endpoint, "Zencoder endpoint to use. Defaults to https://app.zencoder.com/.", :short => 'e', :type => String
   opt :api_version, "API version to use.", :short => 'v', :type => String, :default => 'v2'
+  opt :next, "Loops until a new notification arrives. This overrides --loop, --count (with 1) and --since (with 0)", :short => 'x', :default => false
 end
 
 
@@ -44,10 +45,15 @@ EOS
   exit 1
 end
 
-
 #
 # Run Zencoder Notifier
 #
+
+if opts[:next]
+  opts[:loop] = true
+  opts[:count] = 1
+  opts[:since] = 0
+end
 
 options               = {}
 options[:api_key]     = ARGV[0]
@@ -57,6 +63,7 @@ options[:page]        = opts[:page]
 options[:since]       = (opts[:since] && (Time.now.utc - (opts[:since].to_i * 60))) || nil
 options[:endpoint]    = opts[:endpoint]
 options[:api_version] = opts[:api_version]
+options[:next]        = opts[:next]
 
 begin
   if opts[:loop]
