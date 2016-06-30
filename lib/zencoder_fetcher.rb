@@ -51,7 +51,7 @@ module ZencoderFetcher
         options = options.merge({:basic_auth => auth}) if !auth.empty?
         begin
           HTTParty.post(local_url, options)
-        rescue Errno::ECONNREFUSED => e
+        rescue Errno::ECONNREFUSED
           puts "Unable to connect to your local server at #{local_url}. Is it running?"
           raise FetcherLocalConnectionError
         end
