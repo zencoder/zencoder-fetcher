@@ -9,12 +9,6 @@ rescue
 end
 
 module ZencoderFetcher
-  FETCHER_VERSION = [0,2,8] unless defined?(FETCHER_VERSION)
-
-  def self.version
-    FETCHER_VERSION.join(".")
-  end
-
   def self.request(options={})
     query = {
       "api_key"  => options[:api_key],
